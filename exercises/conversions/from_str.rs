@@ -10,7 +10,6 @@ struct Person {
     age: usize,
 }
 
-// I AM NOT DONE
 // Steps:
 // 1. If the length of the provided string is 0, then return an error
 // 2. Split the given string on the commas present in it
@@ -21,6 +20,17 @@ struct Person {
 impl FromStr for Person {
     type Err = String;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        let tokens = s.split(",").collect::<Vec<&str>>();
+        match tokens.len() {
+            2 => match tokens[1].parse::<usize>() {
+                Ok(age) => Ok(Person {
+                    name: tokens[0].to_string(),
+                    age: age,
+                }),
+                Err(s) => Err(s.to_string()),
+            },
+            _ => Err(String::from("incompatible length")),
+        }
     }
 }
 
